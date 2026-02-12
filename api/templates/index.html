@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic-Tac-Toe - Neon Edition</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@400;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <!-- Adding a favicon for Vercel/Web -->
+    <link rel="icon" href="https://fav.farm/❌" />
+</head>
+
+<body>
+
+    <!-- Neon grid background handled in CSS body -->
+    <div id="confetti-container"></div> <!-- Container for JS particles -->
+
+    <div class="container">
+        <header>
+            <h1>PyTacToe</h1>
+            <p>Classic Strategy Game</p>
+        </header>
+
+        <main>
+            <div class="game-info">
+                <div class="status" id="status">Current Turn: <span id="current-player" class="player-x">X</span></div>
+                <button id="reset-btn" class="reset-btn">Reset Grid</button>
+            </div>
+
+            <div class="board" id="board">
+                <!-- Board cells -->
+                <div class="cell" data-index="0"></div>
+                <div class="cell" data-index="1"></div>
+                <div class="cell" data-index="2"></div>
+                <div class="cell" data-index="3"></div>
+                <div class="cell" data-index="4"></div>
+                <div class="cell" data-index="5"></div>
+                <div class="cell" data-index="6"></div>
+                <div class="cell" data-index="7"></div>
+                <div class="cell" data-index="8"></div>
+            </div>
+
+            <div id="winner-modal" class="modal hidden">
+                <div class="modal-content">
+                    <h2 id="winner-text">Player X Wins!</h2>
+                    <p style="color: #aaa; margin-bottom: 2rem;">System Override Successful</p>
+                    <button id="modal-reset-btn" class="primary-btn">Reboot System</button>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>Powered by Python & Flask</p>
+        </footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+
+</html>

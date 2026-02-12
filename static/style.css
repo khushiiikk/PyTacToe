@@ -1,0 +1,320 @@
+:root {
+    --bg-color: #050505;
+    --text-color: #ffffff;
+    --board-bg: #1a1a1a;
+    --cell-bg: #111;
+    --neon-cyan: #00f3ff;
+    --neon-pink: #bc13fe;
+    --neon-green: #0aff0a;
+    --border-glow: 0 0 10px rgba(0, 243, 255, 0.5), 0 0 20px rgba(0, 243, 255, 0.3);
+    --text-glow: 0 0 5px rgba(255, 255, 255, 0.5);
+    --font-heading: 'Press Start 2P', cursive;
+    /* Assuming user might want retro, but sticking to system for speed unless imported */
+    --font-body: 'Inter', sans-serif;
+}
+
+@keyframes titlePulse {
+    0% {
+        text-shadow: 0 0 10px var(--neon-cyan), 0 0 20px var(--neon-pink);
+    }
+
+    50% {
+        text-shadow: 0 0 20px var(--neon-cyan), 0 0 40px var(--neon-pink);
+    }
+
+    100% {
+        text-shadow: 0 0 10px var(--neon-cyan), 0 0 20px var(--neon-pink);
+    }
+}
+
+@keyframes cellPop {
+    0% {
+        transform: scale(0.5);
+        opacity: 0;
+    }
+
+    70% {
+        transform: scale(1.1);
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes winnerPulse {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 20px var(--neon-green);
+    }
+
+    50% {
+        transform: scale(1.05);
+        box-shadow: 0 0 50px var(--neon-green);
+    }
+
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 20px var(--neon-green);
+    }
+}
+
+@keyframes backgroundMove {
+    0% {
+        background-position: 0 0;
+    }
+
+    100% {
+        background-position: 40px 40px;
+    }
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--bg-color);
+    background-image:
+        linear-gradient(rgba(0, 243, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(188, 19, 254, 0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    animation: backgroundMove 4s linear infinite;
+    color: var(--text-color);
+    font-family: var(--font-body);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    overflow: hidden;
+    position: relative;
+}
+
+/* Confetti Container */
+#confetti-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 999;
+}
+
+.container {
+    max-width: 500px;
+    width: 100%;
+    padding: 2rem;
+    text-align: center;
+    position: relative;
+    z-index: 10;
+}
+
+header {
+    margin-bottom: 2rem;
+}
+
+h1 {
+    font-weight: 900;
+    font-size: 3.5rem;
+    text-transform: uppercase;
+    color: #fff;
+    animation: titlePulse 2s infinite;
+    margin-bottom: 0.5rem;
+    letter-spacing: 2px;
+}
+
+p {
+    color: #bbb;
+    font-size: 1.1rem;
+    text-shadow: var(--text-glow);
+}
+
+.game-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    background: rgba(30, 30, 30, 0.8);
+    padding: 1rem;
+    border-radius: 12px;
+    border: 1px solid var(--neon-pink);
+    box-shadow: 0 0 15px rgba(188, 19, 254, 0.2);
+    backdrop-filter: blur(5px);
+}
+
+.status {
+    font-weight: 700;
+    font-size: 1.2rem;
+}
+
+.player-x {
+    color: var(--neon-cyan);
+    text-shadow: 0 0 10px var(--neon-cyan);
+}
+
+.player-o {
+    color: var(--neon-pink);
+    text-shadow: 0 0 10px var(--neon-pink);
+}
+
+.reset-btn {
+    background: transparent;
+    border: 2px solid var(--neon-cyan);
+    color: var(--neon-cyan);
+    padding: 0.5rem 1.2rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: bold;
+    text-transform: uppercase;
+    transition: all 0.3s;
+    box-shadow: 0 0 5px var(--neon-cyan);
+}
+
+.reset-btn:hover {
+    background: var(--neon-cyan);
+    color: #000;
+    box-shadow: 0 0 20px var(--neon-cyan);
+}
+
+.board {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    width: 100%;
+    aspect-ratio: 1/1;
+    background: transparent;
+    /* No background needed with gap */
+    padding: 10px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+}
+
+.cell {
+    background: rgba(20, 20, 20, 0.9);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3.5rem;
+    /* Bigger X/O */
+    font-weight: 900;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    user-select: none;
+    aspect-ratio: 1/1;
+    border: 1px solid #333;
+    position: relative;
+    overflow: hidden;
+}
+
+.cell:hover {
+    border-color: var(--neon-cyan);
+    box-shadow: inset 0 0 15px rgba(0, 243, 255, 0.3);
+    transform: translateY(-2px);
+}
+
+.cell.x {
+    color: var(--neon-cyan);
+    text-shadow: 0 0 15px var(--neon-cyan), 0 0 30px var(--neon-cyan);
+    animation: cellPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.cell.o {
+    color: var(--neon-pink);
+    text-shadow: 0 0 15px var(--neon-pink), 0 0 30px var(--neon-pink);
+    animation: cellPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* Modal Styling */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    /* Darker overlay */
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s;
+}
+
+.modal.visible {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.modal-content {
+    background: #111;
+    padding: 3rem;
+    border-radius: 20px;
+    text-align: center;
+    border: 2px solid var(--neon-green);
+    box-shadow: 0 0 50px rgba(10, 255, 10, 0.3);
+    transform: scale(0.8);
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    min-width: 300px;
+}
+
+.modal.visible .modal-content {
+    animation: winnerPulse 2s infinite;
+    transform: scale(1);
+}
+
+.modal h2 {
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    background: linear-gradient(45deg, var(--neon-green), #fff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 10px rgba(10, 255, 10, 0.5);
+}
+
+.primary-btn {
+    background: var(--neon-green);
+    color: #000;
+    border: none;
+    padding: 1rem 3rem;
+    font-size: 1.25rem;
+    font-weight: 800;
+    border-radius: 50px;
+    /* Pill shape */
+    cursor: pointer;
+    box-shadow: 0 0 20px rgba(10, 255, 10, 0.4);
+    transition: all 0.3s;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.primary-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 40px rgba(10, 255, 10, 0.6);
+    background: #fff;
+}
+
+footer {
+    margin-top: 2rem;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+/* Confetti Particle */
+.confetti {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background-color: #fff;
+    border-radius: 2px;
+}
