@@ -1,6 +1,6 @@
 # Tic-Tac-Toe Game (Flask + Vercel)
 
-A clean, modern implementation of the classic Tic-Tac-Toe game using Python (Flask) for the backend logic and vanilla HTML/CSS/JS for the frontend. Designed for serverless deployment on Vercel.
+A clean, modern implementation of the classic Tic-Tac-Toe game using Python (Flask) for the backend logic and vanilla HTML/CSS/JS for the frontend.
 
 ## Features
 - **Backend Logic**: Game state and move validation handled by Python.
@@ -56,5 +56,3 @@ requirements.txt    # Python dependencies
 3.  Vercel will automatically detect `api/index.py` and `vercel.json`.
 4.  Deploy!
 
-## License
-MIT
